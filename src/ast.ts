@@ -12,6 +12,13 @@ export interface Host {
 	value: string;
 }
 
+export interface Port {
+	type: 'port';
+	start: number;
+	end: number;
+	value: string;
+}
+
 export interface Path {
 	type: 'path';
 	start: number;
@@ -27,6 +34,7 @@ export interface AST {
 	url: {
 		schema?: Schema;
 		host: Host;
+		port?: Port;
 		path?: Path;
 	};
 }

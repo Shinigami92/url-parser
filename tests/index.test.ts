@@ -118,4 +118,44 @@ describe('Parser', () => {
 
 		expect(actual).toEqual(expected);
 	});
+
+	//                 0         1         2
+	//                 01234567890123456789012345678
+	test('should parse http://127.0.0.1:8080/service', () => {
+		const expected: AST = {
+			type: 'url',
+			start: 0,
+			end: 28,
+			value: 'http://127.0.0.1:8080/service',
+			url: {
+				schema: {
+					type: 'schema',
+					start: 0,
+					end: 3,
+					value: 'http'
+				},
+				host: {
+					type: 'host',
+					start: 7,
+					end: 15,
+					value: '127.0.0.1'
+				},
+				port: {
+					type: 'port',
+					start: 17,
+					end: 20,
+					value: '8080'
+				},
+				path: {
+					type: 'path',
+					start: 21,
+					end: 28,
+					value: '/service'
+				}
+			}
+		};
+		const actual: AST = parse('http://127.0.0.1:8080/service');
+
+		expect(actual).toEqual(expected);
+	});
 });
