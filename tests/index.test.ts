@@ -10,11 +10,17 @@ describe('Parser', () => {
 			end: 8,
 			value: 'google.de',
 			url: {
-				host: {
-					type: 'host',
+				authority: {
+					type: 'authority',
 					start: 0,
 					end: 8,
-					value: 'google.de'
+					value: 'google.de',
+					host: {
+						type: 'host',
+						start: 0,
+						end: 8,
+						value: 'google.de'
+					}
 				}
 			}
 		};
@@ -38,11 +44,17 @@ describe('Parser', () => {
 					end: 3,
 					value: 'http'
 				},
-				host: {
-					type: 'host',
+				authority: {
+					type: 'authority',
 					start: 7,
 					end: 15,
-					value: 'google.de'
+					value: 'google.de',
+					host: {
+						type: 'host',
+						start: 7,
+						end: 15,
+						value: 'google.de'
+					}
 				}
 			}
 		};
@@ -66,11 +78,17 @@ describe('Parser', () => {
 					end: 4,
 					value: 'https'
 				},
-				host: {
-					type: 'host',
+				authority: {
+					type: 'authority',
 					start: 8,
 					end: 20,
-					value: 'www.google.de'
+					value: 'www.google.de',
+					host: {
+						type: 'host',
+						start: 8,
+						end: 20,
+						value: 'www.google.de'
+					}
 				},
 				path: {
 					type: 'path',
@@ -100,11 +118,17 @@ describe('Parser', () => {
 					end: 4,
 					value: 'https'
 				},
-				host: {
-					type: 'host',
+				authority: {
+					type: 'authority',
 					start: 8,
 					end: 17,
-					value: 'github.com'
+					value: 'github.com',
+					host: {
+						type: 'host',
+						start: 8,
+						end: 17,
+						value: 'github.com'
+					}
 				},
 				path: {
 					type: 'path',
@@ -134,17 +158,23 @@ describe('Parser', () => {
 					end: 3,
 					value: 'http'
 				},
-				host: {
-					type: 'host',
+				authority: {
+					type: 'authority',
 					start: 7,
-					end: 15,
-					value: '127.0.0.1'
-				},
-				port: {
-					type: 'port',
-					start: 17,
 					end: 20,
-					value: '8080'
+					value: '127.0.0.1:8080',
+					host: {
+						type: 'host',
+						start: 7,
+						end: 15,
+						value: '127.0.0.1'
+					},
+					port: {
+						type: 'port',
+						start: 17,
+						end: 20,
+						value: '8080'
+					}
 				},
 				path: {
 					type: 'path',

@@ -1,4 +1,4 @@
-import { AST, Host, Path, Port, Schema } from './ast';
+import { AST, Authority, Host, Path, Port, Schema } from './ast';
 
 export function parse(url: string): AST {
 	console.log('url:', url);
@@ -45,6 +45,14 @@ export function parse(url: string): AST {
 		value: hostMatch
 	};
 
+	const authority: Authority = {
+		type: 'authority',
+		start: host.start,
+		end: host.end,
+		value: host.value,
+		host
+	};
+
 	console.log('host.end:', host.end);
 	const portOffset: number = host.end + (portMatch ? 2 : 0);
 	console.log('portOffset:', portOffset);
@@ -56,6 +64,11 @@ export function parse(url: string): AST {
 			end: portOffset + portMatch.length - 1,
 			value: portMatch
 		};
+
+		authority.end = port.end;
+		authority.value += ':';
+		authority.value += port.value;
+		authority.port = port;
 	}
 
 	let path: Path | undefined;
@@ -86,7 +99,7 @@ export function parse(url: string): AST {
 		start: 0,
 		end: url.length - 1,
 		value: url,
-		url: { schema, host, port, path }
+		url: { schema, authority, path }
 	};
 
 	return ast;

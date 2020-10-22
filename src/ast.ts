@@ -19,6 +19,15 @@ export interface Port {
 	value: string;
 }
 
+export interface Authority {
+	type: 'authority';
+	start: number;
+	end: number;
+	value: string;
+	host: Host;
+	port?: Port;
+}
+
 export interface Path {
 	type: 'path';
 	start: number;
@@ -33,8 +42,7 @@ export interface AST {
 	value: string;
 	url: {
 		schema?: Schema;
-		host: Host;
-		port?: Port;
+		authority: Authority;
 		path?: Path;
 	};
 }
