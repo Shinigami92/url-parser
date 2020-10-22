@@ -1,0 +1,4 @@
+digraph AST {
+	url -> { schema, authority, path, query, fragment };
+	authority -> { host, port };
+}
