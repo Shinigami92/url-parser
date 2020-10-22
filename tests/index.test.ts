@@ -1,6 +1,6 @@
 import { AST, parse } from '../src/index';
 
-describe('Index', () => {
+describe('Parser', () => {
 	//                 0
 	//                 012345678
 	test('should parse google.de', () => {
@@ -81,6 +81,40 @@ describe('Index', () => {
 			}
 		};
 		const actual: AST = parse('https://www.google.de/');
+
+		expect(actual).toEqual(expected);
+	});
+
+	//                 0         1         2
+	//                 012345678901234567890123456789
+	test('should parse https://github.com/Shinigami92', () => {
+		const expected: AST = {
+			type: 'url',
+			start: 0,
+			end: 29,
+			value: 'https://github.com/Shinigami92',
+			url: {
+				schema: {
+					type: 'schema',
+					start: 0,
+					end: 4,
+					value: 'https'
+				},
+				host: {
+					type: 'host',
+					start: 8,
+					end: 17,
+					value: 'github.com'
+				},
+				path: {
+					type: 'path',
+					start: 18,
+					end: 29,
+					value: '/Shinigami92'
+				}
+			}
+		};
+		const actual: AST = parse('https://github.com/Shinigami92');
 
 		expect(actual).toEqual(expected);
 	});

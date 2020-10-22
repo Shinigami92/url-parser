@@ -24,12 +24,9 @@ export function parse(url: string): AST {
 	const urlWithoutSchema: string = url.slice(hostOffset);
 	console.log('urlWithoutSchema:', urlWithoutSchema);
 
-	const hostMatchResult: RegExpExecArray | null = /^(.+)\/?/.exec(urlWithoutSchema);
+	const hostMatchResult: RegExpExecArray | null = /^([^/]*)/.exec(urlWithoutSchema);
 	console.log('hostMatchResult:', hostMatchResult);
-	let hostMatch: string = hostMatchResult?.[1] ?? '';
-	if (hostMatch[hostMatch.length - 1] === '/') {
-		hostMatch = hostMatch.slice(0, -1);
-	}
+	const hostMatch: string = hostMatchResult?.[1] ?? '';
 	console.log('hostMatch:', hostMatch);
 
 	const host: Host = {
@@ -42,7 +39,9 @@ export function parse(url: string): AST {
 	let path: Path | undefined;
 	if (hostMatch.length !== urlWithoutSchema.length) {
 		const urlWithoutHost: string = urlWithoutSchema.slice(hostMatch.length);
+		console.log('urlWithoutHost:', urlWithoutHost);
 		const pathOffset: number = host.end + 1;
+		console.log('pathOffset:', pathOffset);
 		path = {
 			type: 'path',
 			start: pathOffset,
