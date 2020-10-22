@@ -12,8 +12,8 @@ export interface Host {
 	value: string;
 }
 
-export interface Pathname {
-	type: 'pathname';
+export interface Path {
+	type: 'path';
 	start: number;
 	end: number;
 	value: string;
@@ -27,6 +27,6 @@ export interface AST {
 	url: {
 		schema?: Schema;
 		host: Host;
-		pathname?: Pathname;
+		path?: Path;
 	};
 }
