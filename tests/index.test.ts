@@ -213,6 +213,72 @@ describe('Parser', () => {
 		expect(actual).toEqual(expected);
 	});
 
+	//                 0         1         2         3         4         5
+	//                 01234567890123456789012345678901234567890123456789012345678
+	test('should parse https://github.com/Shinigami92/url-parser/settings/branches', () => {
+		const expected: AST = {
+			type: 'url',
+			start: 0,
+			end: 58,
+			value: 'https://github.com/Shinigami92/url-parser/settings/branches',
+			url: {
+				schema: {
+					type: 'schema',
+					start: 0,
+					end: 4,
+					value: 'https'
+				},
+				authority: {
+					type: 'authority',
+					start: 8,
+					end: 17,
+					value: 'github.com',
+					host: {
+						type: 'host',
+						start: 8,
+						end: 17,
+						value: 'github.com'
+					}
+				},
+				path: {
+					type: 'path',
+					start: 18,
+					end: 58,
+					value: '/Shinigami92/url-parser/settings/branches',
+					segments: [
+						{
+							type: 'path-segment',
+							start: 18,
+							end: 29,
+							value: '/Shinigami92'
+						},
+						{
+							type: 'path-segment',
+							start: 30,
+							end: 40,
+							value: '/url-parser'
+						},
+						{
+							type: 'path-segment',
+							start: 41,
+							end: 49,
+							value: '/settings'
+						},
+						{
+							type: 'path-segment',
+							start: 50,
+							end: 58,
+							value: '/branches'
+						}
+					]
+				}
+			}
+		};
+		const actual: AST = parse('https://github.com/Shinigami92/url-parser/settings/branches');
+
+		expect(actual).toEqual(expected);
+	});
+
 	//                 0         1         2
 	//                 01234567890123456789012345678
 	test('should parse http://127.0.0.1:8080/service', () => {
