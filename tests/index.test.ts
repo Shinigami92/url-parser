@@ -188,4 +188,26 @@ describe('Parser', () => {
 
 		expect(actual).toEqual(expected);
 	});
+
+	//                 0
+	//                 01234567
+	test('should parse /service', () => {
+		const expected: AST = {
+			type: 'url',
+			start: 0,
+			end: 7,
+			value: '/service',
+			url: {
+				path: {
+					type: 'path',
+					start: 0,
+					end: 7,
+					value: '/service'
+				}
+			}
+		};
+		const actual: AST = parse('/service');
+
+		expect(actual).toEqual(expected);
+	});
 });

@@ -29,60 +29,69 @@ export function parse(url: string): AST {
 	let hostMatch: string = hostMatchResult?.[1] ?? '';
 	console.log('hostMatch:', hostMatch);
 
-	const portMatchResult: RegExpExecArray | null = /^([^:]*):?(\d*)/.exec(hostMatch);
-	console.log('portMatchResult:', portMatchResult);
-	const portMatch: string | undefined = portMatchResult?.[2];
-	console.log('portMatch:', portMatch);
-	if (portMatch) {
-		hostMatch = hostMatch.slice(0, -portMatch.length - 1);
-	}
-	console.log('hostMatch:', hostMatch);
-
-	const host: Host = {
-		type: 'host',
-		start: hostOffset,
-		end: hostOffset + hostMatch.length - 1,
-		value: hostMatch
-	};
-
-	const authority: Authority = {
-		type: 'authority',
-		start: host.start,
-		end: host.end,
-		value: host.value,
-		host
-	};
-
-	console.log('host.end:', host.end);
-	const portOffset: number = host.end + (portMatch ? 2 : 0);
-	console.log('portOffset:', portOffset);
+	let authority: Authority | undefined;
+	let host: Host | undefined;
 	let port: Port | undefined;
-	if (portMatch) {
-		port = {
-			type: 'port',
-			start: portOffset,
-			end: portOffset + portMatch.length - 1,
-			value: portMatch
+	let portOffset: number;
+
+	if (hostMatch) {
+		const portMatchResult: RegExpExecArray | null = /^([^:]*):?(\d*)/.exec(hostMatch);
+		console.log('portMatchResult:', portMatchResult);
+		const portMatch: string | undefined = portMatchResult?.[2];
+		console.log('portMatch:', portMatch);
+		if (portMatch) {
+			hostMatch = hostMatch.slice(0, -portMatch.length - 1);
+		}
+		console.log('hostMatch:', hostMatch);
+
+		host = {
+			type: 'host',
+			start: hostOffset,
+			end: hostOffset + hostMatch.length - 1,
+			value: hostMatch
 		};
 
-		authority.end = port.end;
-		authority.value += ':';
-		authority.value += port.value;
-		authority.port = port;
+		authority = {
+			type: 'authority',
+			start: host.start,
+			end: host.end,
+			value: host.value,
+			host
+		};
+
+		console.log('host.end:', host.end);
+		portOffset = host.end + (portMatch ? 2 : 0);
+		console.log('portOffset:', portOffset);
+
+		if (portMatch) {
+			port = {
+				type: 'port',
+				start: portOffset,
+				end: portOffset + portMatch.length - 1,
+				value: portMatch
+			};
+
+			authority.end = port.end;
+			authority.value += ':';
+			authority.value += port.value;
+			authority.port = port;
+		}
+	} else {
+		portOffset = -1;
 	}
 
 	let path: Path | undefined;
-	console.log({
-		portOffset,
-		'port?.value.length': port?.value.length,
-		'portOffset + (port?.value.length ?? 0)': portOffset + ((port?.value.length ?? 1) - 1 ?? 0),
-		'urlWithoutSchema.length': urlWithoutSchema.length,
-		'url.length': url.length
-	});
+	// console.log({
+	// 	portOffset,
+	// 	'port?.value.length': port?.value.length,
+	// 	'portOffset + (port?.value.length ?? 0)': portOffset + ((port?.value.length ?? 1) - 1 ?? 0),
+	// 	'urlWithoutSchema.length': urlWithoutSchema.length,
+	// 	'url.length': url.length
+	// });
 
 	const urlWithoutHost: string = url.slice(portOffset + ((port?.value.length ?? 1) - 1 ?? 0) + 1);
 	console.log('urlWithoutHost:', urlWithoutHost);
-	const pathOffset: number = (port ? port.end : host.end) + 1;
+	const pathOffset: number = (port ? port.end : host?.end ?? -1) + 1;
 	console.log('pathOffset:', pathOffset);
 
 	if (urlWithoutHost) {

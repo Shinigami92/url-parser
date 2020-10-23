@@ -42,7 +42,7 @@ export interface AST {
 	value: string;
 	url: {
 		schema?: Schema;
-		authority: Authority;
+		authority?: Authority;
 		path?: Path;
 	};
 }
