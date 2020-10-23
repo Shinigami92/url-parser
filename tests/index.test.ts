@@ -94,7 +94,15 @@ describe('Parser', () => {
 					type: 'path',
 					start: 21,
 					end: 21,
-					value: '/'
+					value: '/',
+					segments: [
+						{
+							type: 'path-segment',
+							start: 21,
+							end: 21,
+							value: '/'
+						}
+					]
 				}
 			}
 		};
@@ -134,11 +142,73 @@ describe('Parser', () => {
 					type: 'path',
 					start: 18,
 					end: 29,
-					value: '/Shinigami92'
+					value: '/Shinigami92',
+					segments: [
+						{
+							type: 'path-segment',
+							start: 18,
+							end: 29,
+							value: '/Shinigami92'
+						}
+					]
 				}
 			}
 		};
 		const actual: AST = parse('https://github.com/Shinigami92');
+
+		expect(actual).toEqual(expected);
+	});
+
+	//                 0         1         2         3         4
+	//                 01234567890123456789012345678901234567890
+	test('should parse https://github.com/Shinigami92/url-parser', () => {
+		const expected: AST = {
+			type: 'url',
+			start: 0,
+			end: 40,
+			value: 'https://github.com/Shinigami92/url-parser',
+			url: {
+				schema: {
+					type: 'schema',
+					start: 0,
+					end: 4,
+					value: 'https'
+				},
+				authority: {
+					type: 'authority',
+					start: 8,
+					end: 17,
+					value: 'github.com',
+					host: {
+						type: 'host',
+						start: 8,
+						end: 17,
+						value: 'github.com'
+					}
+				},
+				path: {
+					type: 'path',
+					start: 18,
+					end: 40,
+					value: '/Shinigami92/url-parser',
+					segments: [
+						{
+							type: 'path-segment',
+							start: 18,
+							end: 29,
+							value: '/Shinigami92'
+						},
+						{
+							type: 'path-segment',
+							start: 30,
+							end: 40,
+							value: '/url-parser'
+						}
+					]
+				}
+			}
+		};
+		const actual: AST = parse('https://github.com/Shinigami92/url-parser');
 
 		expect(actual).toEqual(expected);
 	});
@@ -180,7 +250,15 @@ describe('Parser', () => {
 					type: 'path',
 					start: 21,
 					end: 28,
-					value: '/service'
+					value: '/service',
+					segments: [
+						{
+							type: 'path-segment',
+							start: 21,
+							end: 28,
+							value: '/service'
+						}
+					]
 				}
 			}
 		};
@@ -202,7 +280,15 @@ describe('Parser', () => {
 					type: 'path',
 					start: 0,
 					end: 7,
-					value: '/service'
+					value: '/service',
+					segments: [
+						{
+							type: 'path-segment',
+							start: 0,
+							end: 7,
+							value: '/service'
+						}
+					]
 				}
 			}
 		};

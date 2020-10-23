@@ -1,4 +1,4 @@
-import { AST, Authority, Host, Path, Port, Schema } from './ast';
+import { AST, Authority, Host, Path, PathSegment, Port, Schema } from './ast';
 
 export function parse(url: string): AST {
 	console.log('url:', url);
@@ -95,11 +95,32 @@ export function parse(url: string): AST {
 	console.log('pathOffset:', pathOffset);
 
 	if (urlWithoutHost) {
+		const pathSegments: PathSegment[] = [];
+
+		const pathSegmentRegex: RegExp = /(\/[^/]*)/g;
+		let pathSegmentMatchResult: RegExpExecArray | null;
+
+		let nextPathSegmentOffset: number = pathOffset;
+
+		while ((pathSegmentMatchResult = pathSegmentRegex.exec(urlWithoutHost)) !== null) {
+			console.log('pathSegmentMatchResult:', pathSegmentMatchResult);
+
+			pathSegments.push({
+				type: 'path-segment',
+				start: nextPathSegmentOffset,
+				end: nextPathSegmentOffset + (pathSegmentMatchResult[1].length - 1),
+				value: pathSegmentMatchResult[1]
+			});
+
+			nextPathSegmentOffset += pathSegmentMatchResult[1].length;
+		}
+
 		path = {
 			type: 'path',
 			start: pathOffset,
 			end: pathOffset + urlWithoutHost.length - 1,
-			value: urlWithoutHost
+			value: urlWithoutHost,
+			segments: pathSegments
 		};
 	}
 

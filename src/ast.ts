@@ -28,11 +28,19 @@ export interface Authority {
 	port?: Port;
 }
 
+export interface PathSegment {
+	type: 'path-segment';
+	start: number;
+	end: number;
+	value: string;
+}
+
 export interface Path {
 	type: 'path';
 	start: number;
 	end: number;
 	value: string;
+	segments: PathSegment[];
 }
 
 export interface AST {
