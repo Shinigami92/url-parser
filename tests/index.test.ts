@@ -430,4 +430,58 @@ describe('Parser', () => {
 
 		expect(actual).toEqual(expected);
 	});
+
+	//                 0         1         2
+	//                 0123456789012345678901234
+	test('should parse http://[::1]:8080/service', () => {
+		const expected: AST = {
+			type: 'url',
+			start: 0,
+			end: 24,
+			value: 'http://[::1]:8080/service',
+			url: {
+				schema: {
+					type: 'schema',
+					start: 0,
+					end: 3,
+					value: 'http'
+				},
+				authority: {
+					type: 'authority',
+					start: 7,
+					end: 16,
+					value: '[::1]:8080',
+					host: {
+						type: 'host',
+						start: 7,
+						end: 11,
+						value: '[::1]'
+					},
+					port: {
+						type: 'port',
+						start: 13,
+						end: 16,
+						value: '8080'
+					}
+				},
+				path: {
+					type: 'path',
+					start: 17,
+					end: 24,
+					value: '/service',
+					segments: [
+						{
+							type: 'path-segment',
+							start: 17,
+							end: 24,
+							value: '/service'
+						}
+					]
+				}
+			}
+		};
+		const actual: AST = parse('http://[::1]:8080/service');
+
+		expect(actual).toEqual(expected);
+	});
 });
