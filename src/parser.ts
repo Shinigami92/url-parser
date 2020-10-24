@@ -35,9 +35,9 @@ export function parse(url: string): AST {
 	let portOffset: number;
 
 	if (hostMatch) {
-		const portMatchResult: RegExpExecArray | null = /^([^:]*):?(\d*)/.exec(hostMatch);
+		const portMatchResult: RegExpExecArray | null = /(?::)([0-9]+)$/.exec(hostMatch);
 		console.log('portMatchResult:', portMatchResult);
-		const portMatch: string | undefined = portMatchResult?.[2];
+		const portMatch: string | undefined = portMatchResult?.[1];
 		console.log('portMatch:', portMatch);
 		if (portMatch) {
 			hostMatch = hostMatch.slice(0, -portMatch.length - 1);
