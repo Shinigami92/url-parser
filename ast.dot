@@ -1,4 +1,7 @@
 digraph AST {
+	path_segment [label="path-segment[]"]
+
 	url -> { schema, authority, path, query, fragment };
 	authority -> { host, port };
+	path -> { path_segment }
 }
