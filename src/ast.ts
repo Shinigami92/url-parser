@@ -43,6 +43,13 @@ export interface Path {
 	segments: PathSegment[];
 }
 
+export interface Fragment {
+	type: 'fragment';
+	start: number;
+	end: number;
+	value: string;
+}
+
 export interface AST {
 	type: 'url';
 	start: number;
@@ -52,5 +59,6 @@ export interface AST {
 		schema?: Schema;
 		authority?: Authority;
 		path?: Path;
+		fragment?: Fragment;
 	};
 }

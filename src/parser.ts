@@ -1,4 +1,4 @@
-import { AST, Authority, Host, Path, PathSegment, Port, Schema } from './ast';
+import { AST, Authority, Fragment, Host, Path, PathSegment, Port, Schema } from './ast';
 
 export function parse(url: string): AST {
 	console.log('url:', url);
@@ -89,12 +89,30 @@ export function parse(url: string): AST {
 	// 	'url.length': url.length
 	// });
 
-	const urlWithoutHost: string = url.slice(portOffset + ((port?.value.length ?? 1) - 1 ?? 0) + 1);
-	console.log('urlWithoutHost:', urlWithoutHost);
+	let fragment: Fragment | undefined;
+
+	let pathMatch: string = url.slice(portOffset + ((port?.value.length ?? 1) - 1 ?? 0) + 1);
+	const indexOfFragmentStartPathOffset: number = pathMatch.indexOf('#');
+	if (indexOfFragmentStartPathOffset >= 0) {
+		const fragmentMatch: string = pathMatch.slice(indexOfFragmentStartPathOffset);
+
+		pathMatch = pathMatch.slice(0, indexOfFragmentStartPathOffset);
+
+		const fragmentOffset: number = portOffset + indexOfFragmentStartPathOffset + 1;
+
+		fragment = {
+			type: 'fragment',
+			start: fragmentOffset,
+			end: fragmentOffset + fragmentMatch.length - 1,
+			value: fragmentMatch
+		};
+	}
+	console.log('pathMatch:', pathMatch);
+	console.log('indexOfFragmentStartPathOffset:', indexOfFragmentStartPathOffset);
 	const pathOffset: number = (port ? port.end : host?.end ?? -1) + 1;
 	console.log('pathOffset:', pathOffset);
 
-	if (urlWithoutHost) {
+	if (pathMatch) {
 		const pathSegments: PathSegment[] = [];
 
 		const pathSegmentRegex: RegExp = /(\/[^/]*)/g;
@@ -102,7 +120,7 @@ export function parse(url: string): AST {
 
 		let nextPathSegmentOffset: number = pathOffset;
 
-		while ((pathSegmentMatchResult = pathSegmentRegex.exec(urlWithoutHost)) !== null) {
+		while ((pathSegmentMatchResult = pathSegmentRegex.exec(pathMatch)) !== null) {
 			console.log('pathSegmentMatchResult:', pathSegmentMatchResult);
 
 			pathSegments.push({
@@ -118,8 +136,8 @@ export function parse(url: string): AST {
 		path = {
 			type: 'path',
 			start: pathOffset,
-			end: pathOffset + urlWithoutHost.length - 1,
-			value: urlWithoutHost,
+			end: pathOffset + pathMatch.length - 1,
+			value: pathMatch,
 			segments: pathSegments
 		};
 	}
@@ -129,7 +147,7 @@ export function parse(url: string): AST {
 		start: 0,
 		end: url.length - 1,
 		value: url,
-		url: { schema, authority, path }
+		url: { schema, authority, path, fragment }
 	};
 
 	return ast;
