@@ -1,4 +1,4 @@
-import { AST, Authority, Fragment, Host, Path, PathSegment, Port, Schema } from './ast';
+import { AST, Authority, Fragment, Host, Path, PathSegment, Port, Query, Schema } from './ast';
 
 export function parse(url: string): AST {
 	console.log('url:', url);
@@ -89,9 +89,26 @@ export function parse(url: string): AST {
 	// 	'url.length': url.length
 	// });
 
+	let query: Query | undefined;
 	let fragment: Fragment | undefined;
 
 	let pathMatch: string = url.slice(portOffset + ((port?.value.length ?? 1) - 1 ?? 0) + 1);
+	const indexOfQueryStartPathOffset: number = pathMatch.indexOf('?');
+	if (indexOfQueryStartPathOffset >= 0) {
+		const queryMatch: string = pathMatch.slice(indexOfQueryStartPathOffset);
+
+		pathMatch = pathMatch.slice(0, indexOfQueryStartPathOffset);
+
+		const queryOffset: number = portOffset + indexOfQueryStartPathOffset + 1;
+
+		query = {
+			type: 'query',
+			start: queryOffset,
+			end: queryOffset + queryMatch.length - 1,
+			value: queryMatch
+		};
+	}
+
 	const indexOfFragmentStartPathOffset: number = pathMatch.indexOf('#');
 	if (indexOfFragmentStartPathOffset >= 0) {
 		const fragmentMatch: string = pathMatch.slice(indexOfFragmentStartPathOffset);
@@ -147,7 +164,7 @@ export function parse(url: string): AST {
 		start: 0,
 		end: url.length - 1,
 		value: url,
-		url: { schema, authority, path, fragment }
+		url: { schema, authority, path, query, fragment }
 	};
 
 	return ast;

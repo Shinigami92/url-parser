@@ -563,5 +563,69 @@ describe('Parser', () => {
 		expect(actual).toEqual(expected);
 	});
 
-	// https://github.com/Shinigami92/url-parser/issues?q=is%3Aissue+is%3Aopen+
+	//                 0         1         2         3         4         5         6         7
+	//                 012345678901234567890123456789012345678901234567890123456789012345678901
+	test('should parse https://github.com/Shinigami92/url-parser/issues?q=is%3Aissue+is%3Aopen+', () => {
+		const expected: AST = {
+			type: 'url',
+			start: 0,
+			end: 71,
+			value: 'https://github.com/Shinigami92/url-parser/issues?q=is%3Aissue+is%3Aopen+',
+			url: {
+				schema: {
+					type: 'schema',
+					start: 0,
+					end: 4,
+					value: 'https'
+				},
+				authority: {
+					type: 'authority',
+					start: 8,
+					end: 17,
+					value: 'github.com',
+					host: {
+						type: 'host',
+						start: 8,
+						end: 17,
+						value: 'github.com'
+					}
+				},
+				path: {
+					type: 'path',
+					start: 18,
+					end: 47,
+					value: '/Shinigami92/url-parser/issues',
+					segments: [
+						{
+							type: 'path-segment',
+							start: 18,
+							end: 29,
+							value: '/Shinigami92'
+						},
+						{
+							type: 'path-segment',
+							start: 30,
+							end: 40,
+							value: '/url-parser'
+						},
+						{
+							type: 'path-segment',
+							start: 41,
+							end: 47,
+							value: '/issues'
+						}
+					]
+				},
+				query: {
+					type: 'query',
+					start: 48,
+					end: 71,
+					value: '?q=is%3Aissue+is%3Aopen+'
+				}
+			}
+		};
+		const actual: AST = parse('https://github.com/Shinigami92/url-parser/issues?q=is%3Aissue+is%3Aopen+');
+
+		expect(actual).toEqual(expected);
+	});
 });
