@@ -3,10 +3,10 @@
 <p align="center">
   <a href="https://github.com/Shinigami92/url-parser/blob/main/LICENSE">
     <img alt="license: MIT" src="https://img.shields.io/github/license/Shinigami92/url-parser.svg?style=flat-square"></a>
-  <!-- <a href="https://www.npmjs.com/package/@Shinigami92/url-parser">
-    <img alt="NPM package" src="https://img.shields.io/npm/v/@Shinigami92/url-parser.svg?style=flat-square"></a> -->
-  <!-- <a href="https://www.npmjs.com/package/@Shinigami92/url-parser">
-    <img alt="downloads" src="https://img.shields.io/npm/dt/@Shinigami92/url-parser.svg?style=flat-square"></a> -->
+  <a href="https://www.npmjs.com/package/@shinigami92/url-parser">
+    <img alt="NPM package" src="https://img.shields.io/npm/v/@shinigami92/url-parser.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@shinigami92/url-parser">
+    <img alt="downloads" src="https://img.shields.io/npm/dt/@shinigami92/url-parser.svg?style=flat-square"></a>
   <a href="#badge">
     <img alt="code style: Prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square"></a>
   <a href="https://github.com/Shinigami92/url-parser/actions?query=branch%3Amain+workflow%3ACI">
