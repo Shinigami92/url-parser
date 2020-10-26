@@ -10,7 +10,8 @@
 		"lint": "yarn lint:src && yarn lint:test",
 		"lint:src": "eslint --ext .ts src",
 		"lint:test": "eslint --ext .test.ts tests",
-		"test": "jest"
+		"test": "jest",
+		"prepublishOnly": "yarn clean && yarn install --cache-folder .yarn && yarn build && yarn test"
 	},
 	"author": {
 		"name": "Christopher Quadflieg",
@@ -27,7 +28,7 @@
 	],
 	"devDependencies": {
 		"@types/jest": "~26.0.15",
-		"@types/node": "~14.14.2",
+		"@types/node": "~14.14.3",
 		"@types/prettier": "~2.1.5",
 		"@typescript-eslint/eslint-plugin": "~4.5.0",
 		"@typescript-eslint/parser": "~4.5.0",
