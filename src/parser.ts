@@ -1,13 +1,13 @@
 import { AST, Authority, Fragment, Host, Path, PathSegment, Port, Query, Schema } from './ast';
 
 export function parse(url: string): AST {
-	console.log('url:', url);
+	// console.log('url:', url);
 
 	const schemaMatchResult: RegExpExecArray | null = /^(.*):\/\//.exec(url);
-	console.log('schemaMatchResult:', schemaMatchResult);
+	// console.log('schemaMatchResult:', schemaMatchResult);
 	const schemaMatch: string | undefined = schemaMatchResult?.[1];
-	console.log('schemaMatch:', schemaMatch);
-	console.log('schemaMatch.length:', schemaMatch?.length);
+	// console.log('schemaMatch:', schemaMatch);
+	// console.log('schemaMatch.length:', schemaMatch?.length);
 	let schema: Schema | undefined;
 	if (schemaMatch) {
 		schema = {
@@ -19,15 +19,15 @@ export function parse(url: string): AST {
 	}
 
 	const hostOffset: number = schema ? schema.value.length + 3 : 0;
-	console.log('hostOffset:', hostOffset);
+	// console.log('hostOffset:', hostOffset);
 
 	const urlWithoutSchema: string = url.slice(hostOffset);
-	console.log('urlWithoutSchema:', urlWithoutSchema);
+	// console.log('urlWithoutSchema:', urlWithoutSchema);
 
 	const hostMatchResult: RegExpExecArray | null = /^([^/]*)/.exec(urlWithoutSchema);
-	console.log('hostMatchResult:', hostMatchResult);
+	// console.log('hostMatchResult:', hostMatchResult);
 	let hostMatch: string = hostMatchResult?.[1] ?? '';
-	console.log('hostMatch:', hostMatch);
+	// console.log('hostMatch:', hostMatch);
 
 	let authority: Authority | undefined;
 	let host: Host | undefined;
@@ -36,13 +36,13 @@ export function parse(url: string): AST {
 
 	if (hostMatch) {
 		const portMatchResult: RegExpExecArray | null = /(?::)([0-9]+)$/.exec(hostMatch);
-		console.log('portMatchResult:', portMatchResult);
+		// console.log('portMatchResult:', portMatchResult);
 		const portMatch: string | undefined = portMatchResult?.[1];
-		console.log('portMatch:', portMatch);
+		// console.log('portMatch:', portMatch);
 		if (portMatch) {
 			hostMatch = hostMatch.slice(0, -portMatch.length - 1);
 		}
-		console.log('hostMatch:', hostMatch);
+		// console.log('hostMatch:', hostMatch);
 
 		host = {
 			type: 'host',
@@ -59,9 +59,9 @@ export function parse(url: string): AST {
 			host
 		};
 
-		console.log('host.end:', host.end);
+		// console.log('host.end:', host.end);
 		portOffset = host.end + (portMatch ? 2 : 0);
-		console.log('portOffset:', portOffset);
+		// console.log('portOffset:', portOffset);
 
 		if (portMatch) {
 			port = {
@@ -124,10 +124,10 @@ export function parse(url: string): AST {
 			value: fragmentMatch
 		};
 	}
-	console.log('pathMatch:', pathMatch);
-	console.log('indexOfFragmentStartPathOffset:', indexOfFragmentStartPathOffset);
+	// console.log('pathMatch:', pathMatch);
+	// console.log('indexOfFragmentStartPathOffset:', indexOfFragmentStartPathOffset);
 	const pathOffset: number = (port ? port.end : host?.end ?? -1) + 1;
-	console.log('pathOffset:', pathOffset);
+	// console.log('pathOffset:', pathOffset);
 
 	if (pathMatch) {
 		const pathSegments: PathSegment[] = [];
@@ -138,7 +138,7 @@ export function parse(url: string): AST {
 		let nextPathSegmentOffset: number = pathOffset;
 
 		while ((pathSegmentMatchResult = pathSegmentRegex.exec(pathMatch)) !== null) {
-			console.log('pathSegmentMatchResult:', pathSegmentMatchResult);
+			// console.log('pathSegmentMatchResult:', pathSegmentMatchResult);
 
 			pathSegments.push({
 				type: 'path-segment',
